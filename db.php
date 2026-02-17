@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 function get_pdo(): PDO
 {
-    $host = "localhost";
-    $db = "pageweb_auth";
-    $user = "root";
-    $pass = "";
-    $charset = "utf8mb4";
+    # Option securite (A02)
+    $host = getenv("DB_HOST");
+    $db = getenv("DB_NAME");
+    $user = getenv("DB_USER");
+    $pass = getenv("DB_PASS") ?: "";
+    $charset = getenv("DB_CHARSET");
 
     $dsn = "mysql:host={$host};dbname={$db};charset={$charset}";
     $options = [

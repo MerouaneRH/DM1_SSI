@@ -51,6 +51,12 @@ h1 {
   font-size: 22px;
 }
 
+.welcome {
+  margin: -6px 0 14px;
+  font-weight: 600;
+  color: #1f2933;
+}
+
 .field {
   display: flex;
   flex-direction: column;

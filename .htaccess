@@ -1,0 +1,61 @@
+# A1 - Protection des fichiers sensibles
+# Empêcher l'accès direct aux fichiers de configuration
+
+<Files "db.php">
+    Require all denied
+</Files>
+
+<Files ".htaccess">
+    Require all denied
+</Files>
+
+<Files "*.md">
+    Require all denied
+</Files>
+
+# A1 - Désactiver la navigation de dossiers (Directory Listing)
+Options -Indexes
+
+# A2 - Désactiver l'affichage des erreurs PHP (si PHP en mode module Apache)
+<IfModule mod_php7.c>
+    php_flag display_errors Off
+    php_flag display_startup_errors Off
+</IfModule>
+<IfModule mod_php8.c>
+    php_flag display_errors Off
+    php_flag display_startup_errors Off
+</IfModule>
+
+# Protection contre l'inclusion de fichiers malicieux
+<IfModule mod_php7.c>
+    php_flag allow_url_fopen Off
+    php_flag allow_url_include Off
+</IfModule>
+<IfModule mod_php8.c>
+    php_flag allow_url_fopen Off
+    php_flag allow_url_include Off
+</IfModule>
+
+# A2 - Headers de sécurité
+<IfModule mod_headers.c>
+    # Protection XSS
+    Header set X-XSS-Protection "1; mode=block"
+    
+    # Protection contre le clickjacking
+    Header set X-Frame-Options "SAMEORIGIN"
+    
+    # Empêcher la détection du type MIME
+    Header set X-Content-Type-Options "nosniff"
+    
+    # Politique de référent
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # A8 - Content Security Policy (CSP)
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'"
+    
+    # A5 - Permissions Policy (anciennement Feature Policy)
+    Header set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+    
+    # Protection supplémentaire
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+</IfModule>
